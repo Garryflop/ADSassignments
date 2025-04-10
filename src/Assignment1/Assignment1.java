@@ -1,4 +1,4 @@
-import java.util.Scanner;
+package Assignment1;
 
 public class Assignment1 {
     // O(n)
@@ -116,7 +116,7 @@ public class Assignment1 {
 
         return findGCD(k, n % k);
     }
-
+    
     public static void main(String[] args) {
         //1
 //        Scanner sc = new Scanner(System.in);
