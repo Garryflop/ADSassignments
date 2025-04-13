@@ -1,11 +1,11 @@
-package Assignment2;
+package Assignment2.lists;
 
 import Assignment2.interfaces.MyList;
 
 
 import java.util.Iterator;
 
-public class MyArrayList<T> implements MyList<T> {
+public class MyArrayList<T extends Comparable<T>> implements MyList<T> {
     private Object[] arr;
     private int size;
     private static final int DEFAULT_CAPACITY = 10;
@@ -20,7 +20,7 @@ public class MyArrayList<T> implements MyList<T> {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
     }
 
-    private void ensureCapacity(int minCapacity) {
+    private void increaseCapacity(int minCapacity) {
         if (minCapacity > arr.length){
             int newCapacity = Math.max(minCapacity * 2, arr.length * 2);
             Object[] newElements = new Object[newCapacity];
@@ -34,7 +34,7 @@ public class MyArrayList<T> implements MyList<T> {
 
     @Override
     public void add(T element) {
-        ensureCapacity(size + 1);
+        increaseCapacity(size + 1);
         arr[size++] = element;
     }
 
@@ -49,7 +49,7 @@ public class MyArrayList<T> implements MyList<T> {
         if (index < 0 || index > size){
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
         }
-        ensureCapacity(size + 1);
+        increaseCapacity(size + 1);
         for (int i = size; i > index; i--){
             arr[i] = arr[i - 1];
         }
@@ -58,12 +58,14 @@ public class MyArrayList<T> implements MyList<T> {
 
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public T get(int index) {
         checkIndex(index);
         return (T) arr[index];
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public T getFirst() {
         if (size == 0){
@@ -72,6 +74,7 @@ public class MyArrayList<T> implements MyList<T> {
         return (T) arr[0];
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public T getLast() {
         if (size == 0){
@@ -87,6 +90,7 @@ public class MyArrayList<T> implements MyList<T> {
             arr[i] = arr[i + 1];
         }
         arr[size - 1] = null;
+        size--;
     }
 
     @Override
@@ -94,7 +98,7 @@ public class MyArrayList<T> implements MyList<T> {
         if (size == 0){
             throw new RuntimeException("The list is empty");
         }
-        size--;
+        remove(0);
     }
 
     @Override
@@ -107,8 +111,24 @@ public class MyArrayList<T> implements MyList<T> {
 
     @Override
     public void sort() {
-//there is will simple sort func
+        boolean swapped;
+        for (int i = 0; i < size - 1; i++) {
+            swapped = false;
+            for (int j = 0; j < size - 1 - i; j++) {
+                T current = (T) arr[j];
+                T next = (T) arr[j + 1];
+                if (current.compareTo(next) > 0) {
+                    arr[j] = next;
+                    arr[j + 1] = current;
+                    swapped = true;
+                }
+            }
+            if (!swapped) {
+                break;
+            }
+        }
     }
+
 
     @Override
     public int indexOf(Object object) {
@@ -163,6 +183,7 @@ public class MyArrayList<T> implements MyList<T> {
         size = 0;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Iterator<T> iterator() {
         return new Iterator<T>() {
