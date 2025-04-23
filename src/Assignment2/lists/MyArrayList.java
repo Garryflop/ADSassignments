@@ -108,7 +108,7 @@ public class MyArrayList<T extends Comparable<T>> implements MyList<T> {
         }
         remove(size - 1);
     }
-
+    @SuppressWarnings("unchecked")
     @Override
     public void sort() {
         boolean swapped;
