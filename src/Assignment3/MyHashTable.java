@@ -125,4 +125,19 @@ public class MyHashTable<K, V> {
         return null;
     }
 
+    public int getBucketCount(){
+        return M;
+    }
+
+    public int getBucketSize(int bucketIndex){
+        int count = 0;
+        for (HashNode<K, V> curr = chainArray[bucketIndex]; curr != null; curr = curr.next) {
+            count++;
+        }
+        return count;
+    }
+
+    public int size(){
+        return size;
+    }
 }
