@@ -1,4 +1,4 @@
-package Assignment3;
+package Assignment3.HashTable;
 
 public class MyTestingClass {
     private int id;
