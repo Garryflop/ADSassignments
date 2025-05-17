@@ -1,32 +1,33 @@
 package Assignment4;
 import java.util.*;
 
-public class Search<Vertex> {
-    protected Set<Vertex> marked;
-    protected Map<Vertex, Vertex> edgeTo;
-    protected final Vertex source;
+public abstract class Search<T> {
+    protected final Set<Vertex<T>> marked = new HashSet<>();
+    protected final Map<Vertex<T>, Vertex<T>> edgeTo = new HashMap<>();
+    protected final Vertex<T> source;
 
-    public Search(Vertex source) {
+    public Search(Vertex<T> source) {
         this.source = source;
-        marked = new HashSet<>();
-        edgeTo = new HashMap<>();
     }
 
-    public boolean hasPathTo(Vertex v) {
-        return marked.contains(v);
-    }
-
-    public Iterable<Vertex> pathTo(Vertex v) {
-        if (!hasPathTo(v)) return null;
-
-        LinkedList<Vertex> ls = new LinkedList<>();
-        for (Vertex i = v; i != source; i = edgeTo.get(i)) {
-            ls.push(i); // inverted adding
+    public boolean hasPathTo(T data) {
+        for (Vertex<T> v : marked) {
+            if (v.getData().equals(data)) return true;
         }
+        return false;
+    }
 
-        ls.push(source);
-
-        return ls;
+    public List<T> pathTo(T data) {
+        Vertex<T> target = null;
+        for (Vertex<T> v : marked) {
+            if (v.getData().equals(data)) { target = v; break; }
+        }
+        if (target == null) return Collections.emptyList();
+        LinkedList<T> path = new LinkedList<>();
+        for (Vertex<T> v = target; !v.equals(source); v = edgeTo.get(v)) {
+            path.addFirst(v.getData());
+        }
+        path.addFirst(source.getData());
+        return path;
     }
 }
-

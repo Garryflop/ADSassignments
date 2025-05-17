@@ -1,21 +1,19 @@
 package Assignment4;
+import java.util.*;
 
-public class DepthFirstSearch<Vertex> extends Search<Vertex> {
-    public DepthFirstSearch(UnweightedGraph<Vertex> graph, Vertex source) {
-        super(source);
-
-        dfs(graph, source);
+public class DepthFirstSearch<T> extends Search<T> {
+    public DepthFirstSearch(UnweightedGraph<T> graph, T srcData) {
+        super(graph.getVertex(srcData));
+        dfs(source);
     }
 
-    private void dfs(UnweightedGraph<Vertex> graph, Vertex current) {
-        marked.add(current);
-
-        for (Vertex v : graph.adjacencyList(current)) {
-            if (!marked.contains(v)) {
-                edgeTo.put(v, current);
-                dfs(graph, v);
+    private void dfs(Vertex<T> v) {
+        marked.add(v);
+        for (Vertex<T> w : v.getAdjacentVertices().keySet()) {
+            if (!marked.contains(w)) {
+                edgeTo.put(w, v);
+                dfs(w);
             }
         }
     }
 }
-
